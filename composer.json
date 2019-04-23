@@ -1,0 +1,50 @@
+{
+  "name": "idiosyncratic/http-runner",
+  "type": "project",
+  "license": "ISC",
+  "authors": [
+    {
+      "name": "Jason Silkey",
+      "email": "jason@jasonsilkey.com"
+    }
+  ],
+  "keywords": [
+    "psr-7",
+    "psr-15"
+  ],
+  "require": {
+    "php": ">=7.3",
+    "psr/http-factory": "^1.0",
+    "psr/http-message": "^1.0",
+    "psr/http-server-handler": "^1.0",
+    "psr/http-server-middleware": "^1.0"
+  },
+  "require-dev": {
+    "doctrine/coding-standard": "^6.0",
+    "idiosyncratic/http-middlewarehandler": "^1.0",
+    "nyholm/psr7": "^1.1",
+    "nyholm/psr7-server": "^0.3.0",
+    "phpspec/phpspec": "^5.1",
+    "phpstan/phpstan": "^0.11.2",
+    "phpunit/phpunit": "^8.0"
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "config": {
+    "preferred-install": "dist",
+    "sort-packages": true,
+    "optimize-autoloader": true,
+    "discard-changes": true,
+    "bin-dir" : "bin"
+  },
+  "autoload": {
+    "psr-4": {
+      "Idiosyncratic\\Http\\Runner\\": "src"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Idiosyncratic\\Http\\Runner\\": "tests"
+    }
+  }
+}
