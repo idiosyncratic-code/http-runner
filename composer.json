@@ -1,6 +1,7 @@
 {
   "name": "idiosyncratic/http-runner",
-  "type": "project",
+  "description": "PSR-15 HTTP Request runner",
+  "type": "library",
   "license": "ISC",
   "authors": [
     {
@@ -24,8 +25,7 @@
     "idiosyncratic/http-middlewarehandler": "^1.0",
     "nyholm/psr7": "^1.1",
     "nyholm/psr7-server": "^0.3.0",
-    "phpspec/phpspec": "^5.1",
-    "phpstan/phpstan": "^0.11.2",
+    "phpstan/phpstan": "^0.11",
     "phpunit/phpunit": "^8.0"
   },
   "minimum-stability": "dev",

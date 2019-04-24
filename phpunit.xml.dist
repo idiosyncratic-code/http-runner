@@ -12,14 +12,18 @@
      >
 
     <testsuites>
-        <testsuite name="http-server">
+        <testsuite name="default">
             <directory suffix="Test.php">./tests</directory>
         </testsuite>
     </testsuites>
 
     <filter>
-        <whitelist addUncoveredFilesFromWhitelist="false">
+        <whitelist processUncoveredFilesFromWhitelist="true">
             <directory suffix=".php">./src</directory>
+            <exclude>
+                <!-- excluded because the header() function is (practically) untestable -->
+                <file>./src/HeaderFunctionEmitter.php</file>
+            </exclude>
         </whitelist>
     </filter>
 </phpunit>
