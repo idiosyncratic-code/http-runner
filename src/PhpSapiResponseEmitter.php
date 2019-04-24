@@ -28,7 +28,7 @@ final class PhpSapiResponseEmitter implements ResponseEmitter
 
         foreach ($response->getHeaders() as $name => $values) {
             foreach ($values as $value) {
-                $this->header->emitHeader(sprintf('%s: %s', strtolower($name), $value), false);
+                $this->header->emitHeader(sprintf('%s: %s', strtolower($name), $value));
             }
         }
 

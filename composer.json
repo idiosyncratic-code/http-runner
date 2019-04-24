@@ -22,11 +22,11 @@
   },
   "require-dev": {
     "doctrine/coding-standard": "^6.0",
-    "idiosyncratic/http-middlewarehandler": "^1.0",
-    "nyholm/psr7": "^1.1",
-    "nyholm/psr7-server": "^0.3.0",
     "phpstan/phpstan": "^0.11",
     "phpunit/phpunit": "^8.0"
+  },
+  "suggest": {
+    "idiosyncratic/http-middlewarehandler": "PSR-15 Request/Middleware handler"
   },
   "minimum-stability": "dev",
   "prefer-stable": true,
