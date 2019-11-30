@@ -12,6 +12,5 @@
     <!-- Directories to be checked -->
     <file>src</file>
 
-    <!-- Include full Doctrine Coding Standard -->
-    <rule ref="Doctrine"/>
+    <rule ref="Idiosyncratic" />
 </ruleset>

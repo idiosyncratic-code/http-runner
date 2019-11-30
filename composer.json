@@ -21,9 +21,7 @@
     "psr/http-server-middleware": "^1.0"
   },
   "require-dev": {
-    "doctrine/coding-standard": "^6.0",
-    "phpstan/phpstan": "^0.11",
-    "phpunit/phpunit": "^8.0"
+    "idiosyncratic/devtools": "^0.2"
   },
   "suggest": {
     "idiosyncratic/http-middlewarehandler": "PSR-15 Request/Middleware handler"

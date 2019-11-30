@@ -1,29 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit backupGlobals="false"
-     backupStaticAttributes="false"
-     bootstrap="vendor/autoload.php"
-     colors="true"
-     convertErrorsToExceptions="true"
-     convertNoticesToExceptions="true"
-     convertWarningsToExceptions="true"
-     processIsolation="true"
-     stopOnFailure="false"
-     verbose="true"
-     >
+   backupStaticAttributes="false"
+   bootstrap="vendor/autoload.php"
+   colors="true"
+   convertErrorsToExceptions="true"
+   convertNoticesToExceptions="true"
+   convertWarningsToExceptions="true"
+   processIsolation="true"
+   stopOnFailure="false"
+   verbose="true"
+   >
 
     <testsuites>
-        <testsuite name="default">
-            <directory suffix="Test.php">./tests</directory>
-        </testsuite>
+      <testsuite name="default">
+        <directory suffix="Test.php">./tests</directory>
+      </testsuite>
     </testsuites>
 
-    <filter>
-        <whitelist processUncoveredFilesFromWhitelist="true">
-            <directory suffix=".php">./src</directory>
-            <exclude>
-                <!-- excluded because the header() function is (practically) untestable -->
-                <file>./src/HeaderFunctionEmitter.php</file>
-            </exclude>
-        </whitelist>
-    </filter>
+  <filter>
+    <whitelist processUncoveredFilesFromWhitelist="true">
+      <directory suffix=".php">./src</directory>
+      <exclude>
+        <!-- excluded because the header() function is essentially untestable -->
+        <file>./src/HeaderFunctionEmitter.php</file>
+      </exclude>
+    </whitelist>
+  </filter>
 </phpunit>
