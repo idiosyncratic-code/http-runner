@@ -18,12 +18,12 @@ class PhpSapiResponseEmitterTest extends TestCase
     {
         $expectedContent = 'response body';
 
-        $stream = $this->getStreamMock();
+        $stream = $this->createStub(StreamInterface::class);
         $stream->expects($this->once())
             ->method('__toString')
             ->willReturn($expectedContent);
 
-        $response = $this->getResponseMock();
+        $response = $this->createStub(ResponseInterface::class);
         $response->method('getBody')
             ->willReturn($stream);
         $response->method('getProtocolVersion')
@@ -35,7 +35,7 @@ class PhpSapiResponseEmitterTest extends TestCase
         $response->method('getHeaders')
             ->willReturn(['X-HEADER' => ['foo']]);
 
-        $headerEmitter = $this->getHeaderEmitterMock();
+        $headerEmitter = $this->createStub(HeaderEmitter::class);
         $headerEmitter->expects($this->once())
             ->method('emitStatusLine')
             ->with('1.1', 200, 'OK');
@@ -59,20 +59,6 @@ class PhpSapiResponseEmitterTest extends TestCase
     private function getResponseMock() : ResponseInterface
     {
         return $this->getMockBuilder(ResponseInterface::class)
-            ->setMethodsExcept([])
-            ->getMock();
-    }
-
-    private function getStreamMock() : StreamInterface
-    {
-        return $this->getMockBuilder(StreamInterface::class)
-            ->setMethodsExcept([])
-            ->getMock();
-    }
-
-    private function getHeaderEmitterMock() : HeaderEmitter
-    {
-        return $this->getMockBuilder(HeaderEmitter::class)
             ->setMethodsExcept([])
             ->getMock();
     }

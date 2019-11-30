@@ -9,16 +9,17 @@ use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use Psr\Log\NullLogger;
 
 class RunnerTest extends TestCase
 {
     public function testOnlyResponseDataIsEmitted() : void
     {
-        $request = $this->getServerRequestMock();
+        $request = $this->createStub(ServerRequestInterface::class);
 
-        $response = $this->getResponseMock();
+        $response = $this->createStub(ResponseInterface::class);
 
-        $requestHandler = $this->getRequestHandlerMock();
+        $requestHandler = $this->createStub(RequestHandlerInterface::class);
         $requestHandler->expects($this->once())
             ->method('handle')
             ->will($this->returnCallback(
@@ -28,11 +29,9 @@ class RunnerTest extends TestCase
                 }
             ));
 
-        $requestFactory = $this->getServerRequestFactoryMock();
+        $requestFactory = $this->createStub(ServerRequestFactory::class);
 
-        $errorFactory = $this->getErrorResponseFactoryMock();
-
-        $responseEmitter = $this->getResponseEmitterMock();
+        $responseEmitter = $this->createStub(ResponseEmitter::class);
         $responseEmitter->expects($this->once())
             ->method('emit')
             ->will($this->returnCallback(
@@ -43,7 +42,7 @@ class RunnerTest extends TestCase
 
         ob_start();
 
-        $runner = new Runner($requestFactory, $requestHandler, $responseEmitter, $errorFactory);
+        $runner = new Runner($requestFactory, $requestHandler, $responseEmitter, new NullLogger());
 
         $runner->run();
 
@@ -54,92 +53,25 @@ class RunnerTest extends TestCase
         $this->assertEquals($buffer, 'response body');
     }
 
-    public function testErrorResponseNotCalledIfNoExceptionRaised() : void
-    {
-        $request = $this->getServerRequestMock();
-
-        $response = $this->getResponseMock();
-
-        $requestHandler = $this->getRequestHandlerMock();
-
-        $requestFactory = $this->getServerRequestFactoryMock();
-
-        $errorFactory = $this->getErrorResponseFactoryMock();
-        $errorFactory->expects($this->never())
-            ->method('createResponse');
-
-        $responseEmitter = $this->getResponseEmitterMock();
-
-        $runner = new Runner($requestFactory, $requestHandler, $responseEmitter, $errorFactory);
-
-        $runner->run();
-    }
-
     public function testReturnsErrorResponseIfExceptionThrown() : void
     {
-        $request = $this->getServerRequestMock();
+        $this->expectException(Exception::class);
 
-        $response = $this->getResponseMock();
+        $request = $this->createStub(ServerRequestInterface::class);
 
-        $requestHandler = $this->getRequestHandlerMock();
+        $response = $this->createStub(ResponseInterface::class);
+
+        $requestHandler = $this->createStub(RequestHandlerInterface::class);
         $requestHandler->expects($this->once())
             ->method('handle')
             ->will($this->throwException(new Exception()));
 
-        $requestFactory = $this->getServerRequestFactoryMock();
+        $requestFactory = $this->createStub(ServerRequestFactory::class);
 
-        $errorFactory = $this->getErrorResponseFactoryMock();
-        $errorFactory->expects($this->once())
-            ->method('createResponse');
+        $responseEmitter = $this->createStub(ResponseEmitter::class);
 
-
-        $responseEmitter = $this->getResponseEmitterMock();
-
-        $runner = new Runner($requestFactory, $requestHandler, $responseEmitter, $errorFactory);
+        $runner = new Runner($requestFactory, $requestHandler, $responseEmitter, new NullLogger());
 
         $runner->run();
-    }
-
-    private function getServerRequestMock() : ServerRequestInterface
-    {
-        return $this->getMockBuilder(ServerRequestInterface::class)
-            ->setMethodsExcept([])
-            ->getMock();
-    }
-
-    private function getResponseMock() : ResponseInterface
-    {
-        return $this->getMockBuilder(ResponseInterface::class)
-            ->setMethodsExcept([])
-            ->getMock();
-    }
-
-    private function getRequestHandlerMock() : RequestHandlerInterface
-    {
-        return $this->getMockBuilder(RequestHandlerInterface::class)
-            ->setMethods(['handle'])
-            ->getMock();
-    }
-
-
-    private function getServerRequestFactoryMock() : ServerRequestFactory
-    {
-        return $this->getMockBuilder(ServerRequestFactory::class)
-            ->setMethods(['createServerRequest'])
-            ->getMock();
-    }
-
-    private function getErrorResponseFactoryMock() : ErrorResponseFactory
-    {
-        return $this->getMockBuilder(ErrorResponseFactory::class)
-            ->setMethods(['createResponse'])
-            ->getMock();
-    }
-
-    private function getResponseEmitterMock() : ResponseEmitter
-    {
-        return $this->getMockBuilder(ResponseEmitter::class)
-            ->setMethods(['emit'])
-            ->getMock();
     }
 }

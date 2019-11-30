@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Idiosyncratic\Http\Runner;
 
 use Psr\Http\Server\RequestHandlerInterface;
+use Psr\Log\LoggerInterface;
 use Throwable;
 use function header_remove;
 use function ob_end_clean;
@@ -22,14 +23,14 @@ final class Runner
     /** @var ResponseEmitter */
     private $emitter;
 
-    /** @var ErrorResponseFactory */
-    private $error;
+    /** @var LoggerInterface */
+    private $logger;
 
     public function __construct(
         ServerRequestFactory $request,
         RequestHandlerInterface $handler,
         ResponseEmitter $emitter,
-        ErrorResponseFactory $error
+        LoggerInterface $logger
     ) {
         $this->request = $request;
 
@@ -37,7 +38,7 @@ final class Runner
 
         $this->emitter = $emitter;
 
-        $this->error = $error;
+        $this->logger = $logger;
     }
 
     /**
@@ -66,12 +67,14 @@ final class Runner
 
         try {
             $response = $this->handler->handle($this->request->createServerRequest());
-        } catch (Throwable $e) {
-            $response = $this->error->createResponse($e);
-        }
+        } catch (Throwable $t) {
+            $this->logger->error($t->getMessage(), ['exception' => $t]);
 
-        while (ob_get_level() > $outputBuffers) {
-            ob_end_clean();
+            throw $t;
+        } finally {
+            while (ob_get_level() > $outputBuffers) {
+                ob_end_clean();
+            }
         }
 
         $this->emitter->emit($response);
